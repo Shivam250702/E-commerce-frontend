@@ -8,7 +8,7 @@ import {
   selectBrands,
   selectCategories,
   selectTotalItems,
-} from '../productSlice';
+} from '../../product-list/productSlice';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
@@ -36,7 +36,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function ProductList() {
+export default function AdminProductList() {
   const dispatch = useDispatch();
   const products = useSelector(selectAllProducts);
   const brands = useSelector(selectBrands);
@@ -196,7 +196,15 @@ export default function ProductList() {
                 filters={filters}
               ></DesktopFilter>
               {/* Product grid */}
+              
               <div className="lg:col-span-3">
+              <div>
+              <link 
+              to ='/admin/prduct-form'
+               className="rounded-md mx-10 my-5 bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Add New Product
+              </link>
+            </div>
                 <ProductGrid products={products}></ProductGrid>
               </div>
               {/* Product grid end */}
@@ -473,6 +481,7 @@ function ProductGrid({ products }) {
       <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {products.map((product) => (
+            <div>
             <Link to={`/product-detail/${product.id}`} key={product.id}>
               <div className="group relative border-solid border-2 p-2 border-gray-200">
                 <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
@@ -506,9 +515,20 @@ function ProductGrid({ products }) {
                       ${product.price}
                     </p>
                   </div>
+                  
                 </div>
+                
               </div>
             </Link>
+            <div>
+            <Link
+                  to={`/admin/product-form/edit/${product.id}`}
+                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Edit Product
+                </Link>
+            </div>
+            </div>
           ))}
         </div>
       </div>
