@@ -3,7 +3,7 @@ import Cart from '../features/Cart/Cart'
 const CartPage = () => {
   return (
     <div>
-      <cart></cart>
+      <Cart></Cart>
     </div>
   )
 }
