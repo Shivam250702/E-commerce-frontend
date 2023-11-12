@@ -3,7 +3,8 @@ import './App.css';
 import Home from './pages/Home';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -32,6 +33,8 @@ import Productform from './features/product-list copy/components/ProductForm';
 import AdminProductFormPage from './pages/AdminProductFormPage';
 import Logout from './features/auth/components/Logout';
 import AdminOrdersPage from './pages/AdminOrdersPage';
+
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -153,7 +156,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
+  const notify = () => toast("Wow so easy!");
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
 
@@ -166,7 +169,9 @@ function App() {
 
   return (
     <div className="App">
+  
       <RouterProvider router={router} />
+     
     </div>
   );
 }
