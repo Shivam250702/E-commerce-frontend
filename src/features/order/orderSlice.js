@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { createOrder, fetchAllOrders,updateOrder } from './orderAPI';
-import { fetchAllProductsAsync } from '../product-list/productSlice';
+
 const initialState = {
   orders: [],
   status: 'idle',
-  currentOrder:null,
-  totalOrders:0
+  currentOrder: null,
+  totalOrders: 0
 };
+//we may need more info of current order
 
 export const createOrderAsync = createAsyncThunk(
   'order/createOrder',
@@ -33,21 +34,14 @@ export const fetchAllOrdersAsync = createAsyncThunk(
     return response.data;
   }
 );
-// export const fetchAllOrdersAsync = createAsyncThunk(
-//   'order/createOrder',
-//   async (pagination) => {
-//     const response = await fetchAllOrders(pagination);
-//     // The value we return becomes the `fulfilled` action payload
-//     return response.data;
-//   }
-// );
 
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: { resetOrder:(state)=>{
-state.currentOrder=null;
-    }
+  reducers: {
+    resetOrder: (state) => {
+      state.currentOrder = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -57,16 +51,15 @@ state.currentOrder=null;
       .addCase(createOrderAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.orders.push(action.payload);
-        state.currentOrder=action.payload;
+        state.currentOrder = action.payload;
       })
       .addCase(fetchAllOrdersAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchAllOrdersAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.orders=action.payload.orders;
-        state.totalOrders=action.payload.totalOrders;
-     
+        state.orders = action.payload.orders;
+        state.totalOrders = action.payload.totalOrders;
       })
       .addCase(updateOrderAsync.pending, (state) => {
         state.status = 'loading';
@@ -75,13 +68,14 @@ state.currentOrder=null;
         state.status = 'idle';
         const index =  state.orders.findIndex(order=>order.id===action.payload.id)
         state.orders[index] = action.payload;
-      });
+      })
   },
 });
 
 export const { resetOrder } = orderSlice.actions;
-export const selectOrders=(state)=>state.order.orders;
+
+export const selectCurrentOrder = (state) => state.order.currentOrder;
+export const selectOrders = (state) => state.order.orders;
 export const selectTotalOrders = (state) => state.order.totalOrders;
- export const selectCurrentOrder = (state) => state.order.currentOrder;
 
 export default orderSlice.reducer;

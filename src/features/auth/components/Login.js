@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, incrementAsync, selectError, selectLoggedInUser } from '../authSlice';
+import { selectError, selectLoggedInUser } from '../authSlice';
 import { Link, Navigate } from 'react-router-dom';
 import { checkUserAsync } from '../authSlice';
 import { useForm } from 'react-hook-form';
 
 export default function Login() {
   const dispatch = useDispatch();
-  const error = useSelector(selectError)
-  const user = useSelector(selectLoggedInUser)
+  const error = useSelector(selectError);
+  const user = useSelector(selectLoggedInUser);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  console.log(errors);
 
   return (
     <>
-      {user && <Navigate to='/' replace={true}></Navigate>}
+      {user && <Navigate to="/" replace={true}></Navigate>}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            src="/ecommerce.png"
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -41,7 +39,6 @@ export default function Login() {
               );
             })}
             className="space-y-6"
-    
           >
             <div>
               <label
@@ -79,7 +76,7 @@ export default function Login() {
                 </label>
                 <div className="text-sm">
                   <Link
-                    to='/forgot-password'
+                    to="/forgot-password"
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Forgot password?
@@ -99,9 +96,7 @@ export default function Login() {
                   <p className="text-red-500">{errors.password.message}</p>
                 )}
               </div>
-              {error && (
-                  <p className="text-red-500">{error.message}</p>
-                )}
+              {error && <p className="text-red-500">{error || error.message}</p>}
             </div>
 
             <div>

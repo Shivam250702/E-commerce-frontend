@@ -2,16 +2,15 @@ import { useState, useEffect } from 'react';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductByIdAsync, selectProductById,selectProductListStatus } from '../productSlice';
+import { fetchProductByIdAsync, selectProductById, selectProductListStatus } from '../productSlice';
 import { useParams } from 'react-router-dom';
-import { addToCartAsync,selectItems } from '../../Cart/cartSlice';
+import { addToCartAsync, selectItems } from '../../Cart/cartSlice';
 import { selectLoggedInUser } from '../../auth/authSlice';
 import { discountedPrice } from '../../../app/constants';
+import { Grid } from 'react-loader-spinner';
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 const colors = [
   { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
   { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -44,32 +43,26 @@ function classNames(...classes) {
 export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
-  const user = useSelector(selectLoggedInUser);
+  const items = useSelector(selectItems);
   const product = useSelector(selectProductById);
   const dispatch = useDispatch();
   const params = useParams();
-  const items = useSelector(selectItems);
-  const notify = () => toast("Wow so easy!");
+ 
   const status = useSelector(selectProductListStatus);
+
   const handleCart = (e) => {
     e.preventDefault();
-    if (items.findIndex((item) => item.productId === product.id) < 0) {
+    if (items.findIndex((item) => item.product.id === product.id) < 0) {
       console.log({ items, product });
       const newItem = {
-        ...product,
-        productId: product.id,
-        quantity: 1,
-        user: user.id,
+        product: product.id,
+        quantity: 1
       };
-      delete newItem['id'];
       dispatch(addToCartAsync(newItem));
       // TODO: it will be based on server response of backend
-      alert.error('Item added to Cart');
+     
     } else {
-      <div>
-      <button onClick={notify}>Notify!</button>
-      <ToastContainer />
-    </div>
+    
     }
   };
 
@@ -79,12 +72,22 @@ export default function ProductDetail() {
 
   return (
     <div className="bg-white">
+      {status === 'loading' ? (
+        <Grid
+          height="80"
+          width="80"
+          color="rgb(79, 70, 229) "
+          ariaLabel="grid-loading"
+          radius="12.5"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      ) : null}
       {product && (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">
-            <ol
-              className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
-            >
+            <ol className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
               {product.breadcrumbs &&
                 product.breadcrumbs.map((breadcrumb) => (
                   <li key={breadcrumb.id}>
@@ -95,7 +98,16 @@ export default function ProductDetail() {
                       >
                         {breadcrumb.name}
                       </a>
-                    
+                      <svg
+                        width={16}
+                        height={20}
+                        viewBox="0 0 16 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                        className="h-5 w-4 text-gray-300"
+                      >
+                        <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                      </svg>
                     </div>
                   </li>
                 ))}
@@ -162,6 +174,7 @@ export default function ProductDetail() {
               <p className="text-3xl tracking-tight text-gray-900">
                 ${discountedPrice(product)}
               </p>
+
               {/* Reviews */}
               <div className="mt-6">
                 <h3 className="sr-only">Reviews</h3>
@@ -314,9 +327,8 @@ export default function ProductDetail() {
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   Add to Cart
-                  </button>
+                </button>
               </form>
-         
             </div>
 
             <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">

@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -16,7 +15,6 @@ export default function Signup() {
     formState: { errors },
   } = useForm();
 
-  console.log(errors);
 
   return (
     <>
@@ -25,7 +23,7 @@ export default function Signup() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            src="/ecommerce.png"
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -39,9 +37,13 @@ export default function Signup() {
             className="space-y-6"
             onSubmit={handleSubmit((data) => {
               dispatch(
-                createUserAsync({ email: data.email, password: data.password, addresses:[],role:'user'
-              //Todo : This role can be given directly to backend
-                 })
+                createUserAsync({
+                  email: data.email,
+                  password: data.password,
+                  addresses: [],
+                  role:'user'
+                  //TODO: this role can be directly given on backend
+                })
               );
               console.log(data);
             })}
@@ -80,7 +82,6 @@ export default function Signup() {
                 >
                   Password
                 </label>
-               
               </div>
               <div className="mt-2">
                 <input
